@@ -1,59 +1,36 @@
-# Towards AI 🤖: An AI Question-Answering Bot
+# Starting Point for the Final Project of the "From Beginner to Advanced LLM Developer" course
 
 ## Overview
 
-**Towards AI 🤖** is a question-answering bot designed to assist students with queries related to Artificial Intelligence (AI), Machine Learning (ML), and Deep Learning (DL). It leverages Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) techniques to provide insightful answers, utilizing a vector database for efficient retrieval of knowledge.
+This repository contains the code of the final "Part 4; Building Your Own advanced LLM + RAG Project to receive certification" lesson of the "From Beginner to Advanced LLM Developer" course.
 
-## Features
+Congrats, you are at the last step of the course! In this final project you'll have the possibility to practice with all the techniques that you learned and earn your certification.
 
-- AI, ML, and DL question-answering capabilities.
-- Integration with ChromaDB for persistent storage.
-- Utilizes OpenAI's models for generating responses.
-- Gradio interface for easy interaction.
-- Memory management for maintaining conversation context.
+If you want, you can use this repository as starting point for your final project. The code here is the same as in the "Building and Deploying a Gradio UI on Hugging Face Spaces" lesson, so you should be already familiar with it. If you want to use it for your project, fork this repository here on GitHub. By doing so, you'll create a copy of this repository in your GitHub account that you can modify as you want.
 
-## Requirements
+## Setup
 
-Make sure you have installed the dependencies from requirements.txt file.
+1. Create a `.env` file and add there your OpenAI API key. Its content should be something like:
+
+```bash
+OPENAI_API_KEY="sk-..."
+```
+
+2. Create a local virtual environment, for example using the `venv` module. Then, activate it.
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+3. Install the dependencies.
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Setup
+4. Launch the Gradio app.
 
-1. **Clone the Repository**
-    
-   ```bash
-   git clone https://huggingface.co/yourusername/towards-ai
-   cd towards-ai
-   ```
-
-2. **Environment Variables**
-
-    Create a .env file in the project root and set the following variables:
-    ```bash
-    OPENAI_API_KEY=
-    LOGFIRE_TOKEN=
-    COHERE_API_KEY=
-    MONGODB_URI= 
-    DB_NAME=ai_tutor_knowledge
-   ```
-3. **Download the Vector Database**
-   
-   The bot requires a pre-trained vector database. If it doesn't exist locally, it will automatically download it from Hugging Face Hub when you run the code.
-
-4. **Usage**
-
-    To start the chatbot, run the following command:
-    ```bash
-    python app.py
-   ```
-
-5. **Gradio Interface**
-
-    Once the application is running, you can access the chatbot interface at http://localhost:7860.
-
-6. **Interacting with the Bot**
-
-   You can ask the bot any question related to AI, ML, or DL. The bot is designed to provide clear, complete answers based on its knowledge base.
+```bash
+python app.py
+```
