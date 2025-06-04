@@ -1,3 +1,14 @@
+---
+title: AI Azure Architect
+emoji: 💡
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+sdk_version: "4.44.1"
+app_file: app.py
+pinned: false
+---
+
 # Starting Point for the Final Project of the "From Beginner to Advanced LLM Developer" course
 
 ## Overview
@@ -14,7 +25,10 @@ If you want, you can use this repository as starting point for your final projec
 
 ```bash
 OPENAI_API_KEY="sk-..."
+COHERE_API_KEY="...."
 ```
+
+<b>Note: Open AI and Cohere Keys are manually enter in a textbox</b>
 
 2. Create a local virtual environment, for example using the `venv` module. Then, activate it.
 
@@ -34,3 +48,24 @@ pip install -r requirements.txt
 ```bash
 python app.py
 ```
+
+# Data Collection and curation
+
+Check this [Data Collection](/scripts/00_DataCollection.md) file for information about collection and curation information.
+
+# Cost 
+The user can try all the functionalities with $0.50 or less.
+
+# Optional functionalities implemented
+
+1. Implement streaming responses. ✅
+2. There's code for RAG evaluation in the [folder](/scripts/), and the README contains the evaluation results. The folder must also contain the evaluation dataset and the evaluation scripts. ✅
+3. The app is designed for a specific goal/domain that is not a tutor about AI. This app is focused on Azure engineering ✅
+4. You have shown evidence of collecting at least two data sources beyond those provided in our course. ([Five datasources collected](/scripts/)) ✅
+5. Use a reranker in your RAG pipeline. It can be a fine-tuned version (your choice). ✅
+6. Use a fine-tuned embedding model in your app. ✅
+
+# Example questions
+- when to use Azure functions vs app service
+- how do I keep microservices decoupled and independent and achive HA
+- Use the many-models architecture approach to scale machine learning models
