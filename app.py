@@ -5,6 +5,7 @@ import os
 # Third-party Imports
 from dotenv import load_dotenv
 import chromadb
+import logfire
 import gradio as gr
 from huggingface_hub import snapshot_download
 
@@ -23,6 +24,8 @@ from llama_index.core.embeddings import resolve_embed_model
 from llama_index.embeddings.adapter import AdapterEmbeddingModel
 
 load_dotenv()
+
+logfire.configure()
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -153,43 +156,49 @@ def generate_completion(query, history, memory, openAI_api_key, cohere_api_key):
         return
     
     llm = OpenAI(temperature=1, model="gpt-4o-mini", api_key=openAI_api_key)
+    client = llm._get_client()
+    logfire.instrument_openai(client)    
+
 
     # Validate Cohere API Key
     if cohere_api_key is None or not cohere_api_key.strip():
         logging.error("Cohere API Key is not set or is invalid. Please provide a valid key.")
         yield "Error: Cohere API Key is not set or is invalid. Please provide a valid key."
         return   
-
-    # Manage memory
-    chat_list = memory.get()
-    if len(chat_list) != 0:
-        user_index = [i for i, msg in enumerate(chat_list) if msg.role == MessageRole.USER]
-        if len(user_index) > len(history):
-            user_index_to_remove = user_index[len(history)]
-            chat_list = chat_list[:user_index_to_remove]
-            memory.set(chat_list)
-    logging.info(f"chat_history: {len(memory.get())} {memory.get()}")
-    logging.info(f"gradio_history: {len(history)} {history}")
-
-    # Create agent
-    tools = get_tools(db_collection="azure-architect", cohere_api_key = cohere_api_key )   
     
-    agent = OpenAIAgent.from_tools(
-        llm=llm,        
-        memory=memory,
-        tools=tools,
-        system_prompt=PROMPT_SYSTEM_MESSAGE
-    )
+    with logfire.span(f"Running query: {query}"):
 
-    # Generate answer
-    completion = agent.stream_chat(query)
-    answer_str = ""
-    for token in completion.response_gen:
-        answer_str += token
-        yield answer_str 
+        # Manage memory
+        chat_list = memory.get()
+        if len(chat_list) != 0:
+            user_index = [i for i, msg in enumerate(chat_list) if msg.role == MessageRole.USER]
+            if len(user_index) > len(history):
+                user_index_to_remove = user_index[len(history)]
+                chat_list = chat_list[:user_index_to_remove]
+                memory.set(chat_list)
+        
+        logfire.info(f"chat_history: {len(memory.get())} {memory.get()}")
+        logfire.info(f"gradio_history: {len(history)} {history}")
 
-    logging.info(f"Source count: {len(completion.sources)}")
-    logging.info(f"Sources: {completion.sources}")    
+        # Create agent
+        tools = get_tools(db_collection="azure-architect", cohere_api_key = cohere_api_key )   
+        
+        agent = OpenAIAgent.from_tools(
+            llm=llm,        
+            memory=memory,
+            tools=tools,
+            system_prompt=PROMPT_SYSTEM_MESSAGE
+        )
+
+        # Generate answer
+        completion = agent.stream_chat(query)
+        answer_str = ""
+        for token in completion.response_gen:
+            answer_str += token
+            yield answer_str 
+
+        logging.info(f"Source count: {len(completion.sources)}")
+        logging.info(f"Sources: {completion.sources}")    
 
 def launch_ui():   
 
