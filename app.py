@@ -193,19 +193,28 @@ def generate_completion(query, history, memory, openAI_api_key, cohere_api_key):
 
 def launch_ui():   
 
+    accordion = gr.Accordion(label="Add your keys (Click to expand)", open=False)
+
+    openai_key_tb = gr.Textbox(        
+            visible=True,
+            label="OpenAI API Key",
+            placeholder="Enter your OpenAI API Key here (e.g., sk-...)",            
+            type="password",
+            )
+    
+    cohere_key_tb = gr.Textbox(        
+            visible=True,
+            label="Cohere API Key",
+            placeholder="Enter your Cohere API Key here",
+            type="password",
+            )
+
 
     with gr.Blocks(
         fill_height=True,
         title="AI Azure Architect 🤖",
         analytics_enabled=True,
-    ) as demo:
-        
-
-        openai_key_tb = gr.Textbox(        
-            visible=True,
-            label="OpenAI API Key",
-            placeholder="Enter your OpenAI API Key here (e.g., sk-...)",
-            )
+    ) as demo:        
     
         def onOpenAIKeyChange(x):                    
             # Validate the OpenAI API Key format
@@ -221,16 +230,10 @@ def launch_ui():
             logging.info(f"OpenAI API Key set: {x is not None}")        
 
         openai_key_tb.change(
-            lambda x: onOpenAIKeyChange(x),
+            onOpenAIKeyChange,
             inputs=openai_key_tb,
             outputs=None,
-        )   
-
-        cohere_key_tb = gr.Textbox(        
-            visible=True,
-            label="Cohere API Key",
-            placeholder="Enter your Cohere API Key here",
-            )
+        )           
 
         def onCohereKeyChange(x):       
             # Validate the Cohere API Key format
@@ -259,9 +262,10 @@ def launch_ui():
         )
 
         gr.ChatInterface(
-            fn=generate_completion,
+            fn=generate_completion,            
             chatbot=chatbot,
             additional_inputs=[memory_state, openai_key_tb, cohere_key_tb],
+            additional_inputs_accordion=accordion,
         )
 
         demo.queue(default_concurrency_limit=64)

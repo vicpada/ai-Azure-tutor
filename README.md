@@ -7,6 +7,7 @@ sdk: gradio
 sdk_version: "4.44.1"
 app_file: app.py
 pinned: false
+license: mit
 ---
 
 # Starting Point for the Final Project of the "From Beginner to Advanced LLM Developer" course

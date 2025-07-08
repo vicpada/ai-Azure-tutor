@@ -40,5 +40,7 @@ The vector is saved as a PKL file and uploaded to HF.
 7. [Reranking](07_Reranking.ipynb)<br />
 <em>Evaluate Cohere Rerank</em><br />
 A jupiter notebook with steps to download the VectorDB, the embedding model and the evaluation dataset.
-Then it evaluates the result with and without cohere. Setting the path for the final solution
+Then it evaluates the result with and without cohere. Setting the path for the final solution<br />
+<br />
 
+![LLM Pipeline](<AI-Tutor-LLM.png>)

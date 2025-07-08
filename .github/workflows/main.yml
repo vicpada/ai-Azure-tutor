@@ -14,7 +14,10 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
+      - name: filter out images
+        run: git filter-branch --force --index-filter "git rm --cached --ignore-unmatch *.png" --prune-empty --tag-name-filter cat -- --all
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://vicpada:$HF_TOKEN@huggingface.co/spaces/vicpada/ai-microsoft-solution-architect main
+        run: git push -f https://vicpada:$HF_TOKEN@huggingface.co/spaces/vicpada/ai-microsoft-solution-architect main
+      
